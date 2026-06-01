@@ -1,5 +1,7 @@
 import os
 from openai import OpenAI
+from rules_loader import load_rules
+
 
 SYSTEM_PROMPT = """You are a senior software engineer doing code review.
 You:
@@ -9,12 +11,16 @@ You:
 Return your feedback as markdown with bullet points and code blocks where helpful.
 """
 
+
 def review_diff_with_llm(diff: str) -> str:
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         raise RuntimeError("OPENAI_API_KEY not set")
 
     client = OpenAI(api_key=api_key)
+    rules = load_rules()
+    rules_text = "\n".join(
+        f"- {r}" for r in rules) if rules else "No custom rules provided."
 
     # Truncate if diff is huge (simple safeguard)
     max_chars = 12000
@@ -22,6 +28,9 @@ def review_diff_with_llm(diff: str) -> str:
         diff = diff[:max_chars] + "\n\n[Diff truncated for review]"
 
     user_prompt = f"""Review the following pull request diff.
+
+Project-specific rules:
+{rules_text}
 
 Provide:
 - A short summary of the change.

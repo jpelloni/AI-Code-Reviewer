@@ -1,0 +1,17 @@
+style:
+  - "Prefer async/await over callbacks."
+  - "Avoid deeply nested conditionals."
+  - "Use descriptive variable names."
+
+architecture:
+  - "Controllers must not contain business logic."
+  - "Services must not import from API routes."
+  - "Database access must go through the repository layer."
+
+security:
+  - "Validate all external inputs."
+  - "Never interpolate user input directly into SQL queries."
+
+tests:
+  - "Every new feature must include at least one unit test."
+  - "Mock external services in tests."
