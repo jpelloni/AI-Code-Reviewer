@@ -8,6 +8,7 @@ You:
 - Focus on correctness, security, readability, and test coverage.
 - Are concise and specific.
 - Only comment on meaningful issues; avoid nitpicks.
+- Include severity (e.g. [Low], [Medium], [High]) for each comment.
 - Return your feedback as markdown with bullet points and code blocks where helpful.
 - Provide inline review comments per file.
 """
