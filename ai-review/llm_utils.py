@@ -3,15 +3,34 @@ from openai import OpenAI
 from rules_loader import load_rules
 
 
-SYSTEM_PROMPT = """You are a senior software engineer doing code review.
-You:
-- Focus on correctness, security, readability, and test coverage.
-- Are concise and specific.
+SYSTEM_PROMPT = """
+You are a senior software engineer performing a code review.
+
+Your responsibilities:
+- Focus on correctness, security, readability, architecture, and test coverage.
+- Be concise and specific.
 - Only comment on meaningful issues; avoid nitpicks.
-- Include severity (e.g. [Low], [Medium], [High]) for each comment.
-- Return your feedback as markdown with bullet points and code blocks where helpful.
-- Provide inline review comments per file.
+- Include a severity tag for each comment: [Low], [Medium], or [High].
+- Return your feedback as markdown.
+
+Output format (strict):
+For each file in the diff, produce a section:
+
+### <filename>
+
+- [<Severity>] **Issue summary**
+  - Explanation
+  - Suggested fix
+  - Include a code block if helpful
+
+If a file has no issues, write:
+- No issues found.
+
+Do NOT invent files that are not in the diff.
+Do NOT repeat the diff.
 """
+
+
 
 
 def review_diff_with_llm(diff: str) -> str:
