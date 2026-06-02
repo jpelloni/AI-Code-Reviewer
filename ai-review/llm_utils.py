@@ -1,12 +1,33 @@
 import os
 from openai import OpenAI
+from rules_loader import load_rules
 
-SYSTEM_PROMPT = """You are a senior software engineer doing code review.
-You:
-- Focus on correctness, security, readability, and test coverage.
-- Are concise and specific.
+
+SYSTEM_PROMPT = """
+You are a senior software engineer performing a code review.
+
+Your responsibilities:
+- Focus on correctness, security, readability, architecture, and test coverage.
+- Be concise and specific.
 - Only comment on meaningful issues; avoid nitpicks.
-Return your feedback as markdown with bullet points and code blocks where helpful.
+- Include a severity tag for each comment: [Low], [Medium], or [High].
+- Return your feedback as markdown.
+
+Output format (strict):
+For each file in the diff, produce a section:
+
+### <filename>
+
+- [<Severity>] **Issue summary**
+  - Explanation
+  - Suggested fix
+  - Include a code block if helpful
+
+If a file has no issues:
+- Do not include it in the output.
+
+Do NOT invent files that are not in the diff.
+Do NOT repeat the diff.
 """
 
 def review_diff_with_llm(diff: str) -> str:
@@ -15,6 +36,9 @@ def review_diff_with_llm(diff: str) -> str:
         raise RuntimeError("OPENAI_API_KEY not set")
 
     client = OpenAI(api_key=api_key)
+    rules = load_rules()
+    rules_text = "\n".join(
+        f"- {r}" for r in rules) if rules else "No custom rules provided."
 
     # Truncate if diff is huge (simple safeguard)
     max_chars = 12000
@@ -22,6 +46,9 @@ def review_diff_with_llm(diff: str) -> str:
         diff = diff[:max_chars] + "\n\n[Diff truncated for review]"
 
     user_prompt = f"""Review the following pull request diff.
+
+Project-specific rules:
+{rules_text}
 
 Provide:
 - A short summary of the change.
