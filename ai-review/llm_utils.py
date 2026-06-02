@@ -30,9 +30,6 @@ Do NOT invent files that are not in the diff.
 Do NOT repeat the diff.
 """
 
-
-
-
 def review_diff_with_llm(diff: str) -> str:
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
