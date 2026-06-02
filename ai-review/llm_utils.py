@@ -23,8 +23,8 @@ For each file in the diff, produce a section:
   - Suggested fix
   - Include a code block if helpful
 
-If a file has no issues, write:
-- No issues found.
+If a file has no issues:
+- Do not include it in the output.
 
 Do NOT invent files that are not in the diff.
 Do NOT repeat the diff.
