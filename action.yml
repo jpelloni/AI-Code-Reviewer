@@ -1,0 +1,9 @@
+name: "AI Code Review Bot"
+description: "LLM-powered code review with custom rules"
+runs:
+  using: "docker"
+  image: "Dockerfile"
+inputs:
+  openai_api_key:
+    required: true
+    description: "OpenAI API key"
