@@ -7,3 +7,4 @@ inputs:
   openai_api_key:
     required: true
     description: "OpenAI API key"
+  
